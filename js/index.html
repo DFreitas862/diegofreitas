@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Pessoal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1>Agenda Pessoal</h1>
+    <button onclick="logout()" class="btn-logout">Sair</button>
+  </header>
+
+  <!-- Navegação -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showSection('historia')">História</button>
+    <button class="nav-btn" onclick="showSection('agenda')">Agenda</button>
+    <button class="nav-btn" onclick="showSection('financeiro')">Financeiro</button>
+    <button class="nav-btn" onclick="showSection('hoje')">Hoje</button>
+  </nav>
+
+  <!-- Conteúdo -->
+  <main>
+    <!-- Modo História -->
+    <section id="historia" class="section active">
+      <div class="section-header">
+        <h2>Modo História</h2>
+        <input type="text" id="search" placeholder="Buscar cartões..." onkeyup="searchCards()">
+      </div>
+      <div id="cards-container" class="cards-container">
+        <!-- Os cartões serão carregados aqui -->
+      </div>
+    </section>
+
+    <!-- Agenda -->
+    <section id="agenda" class="section">
+      <div class="section-header">
+        <h2>Agenda</h2>
+      </div>
+      <div id="agenda-container"></div>
+    </section>
+
+    <!-- Financeiro -->
+    <section id="financeiro" class="section">
+      <div class="section-header">
+        <h2>Financeiro</h2>
+      </div>
+      <div id="financeiro-resumo" class="resumo"></div>
+      <div id="financeiro-container"></div>
+    </section>
+
+    <!-- Hoje -->
+    <section id="hoje" class="section">
+      <div class="section-header">
+        <h2>Hoje</h2>
+      </div>
+      <div id="hoje-container"></div>
+    </section>
+  </main>
+
+  <!-- Botão flutuante Novo Cartão -->
+  <button class="fab" onclick="openNewCardModal()">+</button>
+
+  <!-- Modal Novo Cartão -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Novo Cartão</h3>
+      
+      <input type="text" id="card-title" placeholder="Título *">
+      
+      <select id="card-type">
+        <option value="compromisso">Compromisso</option>
+        <option value="tarefa">Tarefa</option>
+        <option value="financeiro">Financeiro</option>
+        <option value="anotacao">Anotação</option>
+        <option value="pedido">Pedido</option>
+        <option value="leitura">Leitura</option>
+        <option value="sono">Sono</option>
+        <option value="trabalho">Trabalho</option>
+        <option value="outro">Outro</option>
+      </select>
+
+      <textarea id="card-description" placeholder="Descrição / Anotações"></textarea>
+
+      <label>Início:</label>
+      <input type="datetime-local" id="card-start">
+
+      <label>Fim (opcional):</label>
+      <input type="datetime-local" id="card-end">
+
+      <input type="number" id="card-value" placeholder="Valor (R$)" step="0.01">
+
+      <input type="text" id="card-order" placeholder="Número do Pedido (se for Pedido)">
+
+      <div class="modal-actions">
+        <button onclick="closeModal()">Cancelar</button>
+        <button onclick="saveCard()" class="btn-primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/historia.js"></script>
+  <script src="js/agenda.js"></script>
+  <script src="js/financeiro.js"></script>
+
+  <script>
+    // Inicia a aplicação
+    checkAuth();
+    loadCards();
+  </script>
+</body>
+</html>
