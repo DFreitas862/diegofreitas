@@ -3,7 +3,7 @@ let editingCardId = null;
 let tempParentId = null;
 
 async function loadCards() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('cards')
     .select('*')
     .order('start_time', { ascending: false });
@@ -82,7 +82,7 @@ async function saveCard() {
     return;
   }
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabaseClient.auth.getUser();
   if (!user) return;
 
   const cardData = {
@@ -101,13 +101,13 @@ async function saveCard() {
   let error;
 
   if (editingCardId) {
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseClient
       .from('cards')
       .update(cardData)
       .eq('id', editingCardId);
     error = updateError;
   } else {
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('cards')
       .insert([cardData]);
     error = insertError;
@@ -125,7 +125,7 @@ async function saveCard() {
 async function deleteCard(id) {
   if (!confirm('Tem certeza que deseja excluir este cartão?')) return;
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from('cards')
     .delete()
     .eq('id', id);
@@ -141,7 +141,7 @@ async function deleteCard(id) {
 async function toggleStatus(id, currentStatus) {
   const newStatus = currentStatus === 'concluido' ? 'pendente' : 'concluido';
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from('cards')
     .update({ status: newStatus })
     .eq('id', id);

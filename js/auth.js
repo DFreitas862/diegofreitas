@@ -3,7 +3,7 @@ async function login() {
   const password = document.getElementById('password').value;
   const message = document.getElementById('message');
 
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
   if (error) {
     message.textContent = error.message;
@@ -18,7 +18,7 @@ async function signup() {
   const password = document.getElementById('password').value;
   const message = document.getElementById('message');
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
   if (error) {
     message.textContent = error.message;
@@ -30,13 +30,13 @@ async function signup() {
 }
 
 async function checkAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) {
     window.location.href = 'login.html';
   }
 }
 
 async function logout() {
-  await supabase.auth.signOut();
+  await supabaseClient.auth.signOut();
   window.location.href = 'login.html';
 }
