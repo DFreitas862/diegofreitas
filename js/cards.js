@@ -31,6 +31,7 @@ function openNewCardModal(parentId = null) {
   document.getElementById('card-value').value = '';
   document.getElementById('card-order').value = '';
   document.getElementById('card-end').value = '';
+  document.getElementById('card-include-finance').checked = false;
 
   const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -49,6 +50,7 @@ function openEditCardModal(card) {
   document.getElementById('card-type').value = card.type || 'compromisso';
   document.getElementById('card-value').value = card.value || '';
   document.getElementById('card-order').value = card.order_number || '';
+  document.getElementById('card-include-finance').checked = card.include_in_finance || false;
 
   if (card.start_time) {
     const start = new Date(card.start_time);
@@ -95,6 +97,7 @@ async function saveCard() {
     value: document.getElementById('card-value').value ? Number(document.getElementById('card-value').value) : null,
     order_number: document.getElementById('card-order').value.trim() || null,
     parent_id: tempParentId || null,
+    include_in_finance: document.getElementById('card-include-finance').checked,
     status: 'pendente'
   };
 
@@ -131,7 +134,7 @@ async function deleteCard(id) {
     .eq('id', id);
 
   if (error) {
-    alert('Erro ao excluir: ' + error.message);
+    alert('Erro ao atualizar status');
     return;
   }
 
