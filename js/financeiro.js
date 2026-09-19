@@ -2,11 +2,11 @@ function renderFinanceiro() {
   const container = document.getElementById('financeiro-container');
   const resumo = document.getElementById('financeiro-resumo');
 
-  const financeiros = allCards.filter(c => 
-    c.type === 'financeiro' || (c.type === 'pedido' && c.value !== null)
-  );
+  const financeiros = allCards.filter(c => {
+    if (c.value === null || c.value === undefined) return false;
+    return c.type === 'financeiro' || c.type === 'pedido' || c.include_in_finance === true;
+  });
 
-  // Mês atual
   const agora = new Date();
   const mes = agora.getMonth();
   const ano = agora.getFullYear();
@@ -26,20 +26,31 @@ function renderFinanceiro() {
   const saldo = receitas - despesas;
 
   resumo.innerHTML = `
-    <h3 style="margin-bottom:14px;">Resumo do Mês</h3>
-    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-      <span>Receitas</span>
-      <strong style="color:#42b72a;">${receitas.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })}</strong>
-    </div>
-    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-      <span>Despesas</span>
-      <strong style="color:#e41e3f;">${despesas.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })}</strong>
-    </div>
-    <div style="display:flex; justify-content:space-between; border-top:1px solid #eee; padding-top:10px; margin-top:6px;">
-      <span><strong>Saldo</strong></span>
-      <strong style="color:${saldo >= 0 ? '#42b72a' : '#e41e3f'}">
-        ${saldo.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })}
-      </strong>
+    <h3 style="margin-bottom:16px;">Resumo do Mês</h3>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-bottom:8px;">
+      
+      <div style="background:#e8f5e9; border-radius:10px; padding:14px; text-align:center;">
+        <div style="font-size:0.8rem; color:#2e7d32; margin-bottom:4px;">Receitas</div>
+        <div style="font-size:1.15rem; font-weight:700; color:#2e7d32;">
+          ${receitas.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })}
+        </div>
+      </div>
+
+      <div style="background:#ffebee; border-radius:10px; padding:14px; text-align:center;">
+        <div style="font-size:0.8rem; color:#c62828; margin-bottom:4px;">Despesas</div>
+        <div style="font-size:1.15rem; font-weight:700; color:#c62828;">
+          ${despesas.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })}
+        </div>
+      </div>
+
+      <div style="background:${saldo >= 0 ? '#e3f2fd' : '#fff3e0'}; border-radius:10px; padding:14px; text-align:center;">
+        <div style="font-size:0.8rem; color:${saldo >= 0 ? '#1565c0' : '#ef6c00'}; margin-bottom:4px;">Saldo</div>
+        <div style="font-size:1.15rem; font-weight:700; color:${saldo >= 0 ? '#1565c0' : '#ef6c00'};">
+          ${saldo.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })}
+        </div>
+      </div>
+
     </div>
   `;
 
